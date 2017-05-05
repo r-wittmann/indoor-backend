@@ -1,0 +1,17 @@
+{
+  "name": "ind",
+  "version": "0.0.1",
+  "description": "Server for indoor navigation prototype",
+  "main": "server.js",
+  "scripts": {
+    "server": "node server.js",
+    "develop": "nodemon server.js"
+  },
+  "author": "rainer wittmann <r-wittmann@gmx.net>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.15.2",
+    "nodemon": "^1.11.0",
+    "xml2json": "^0.11.0"
+  }
+}
