@@ -31,8 +31,8 @@ router.get('/', (req, res) => {
 
 // get to /all-booth-objects returns an array of all booth objects from the xml file
 // no url or query parameters
-// localhost:8080/api/all-booth-objects
-router.get('/all-booth-objects', (req, res) => {
+// localhost:8080/api/get-booths
+router.get('/get-booths', (req, res) => {
   res.json(boothObjects)
 })
 
