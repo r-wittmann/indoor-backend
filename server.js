@@ -36,28 +36,37 @@ router.get('/get-booths', (req, res) => {
   res.json(boothObjects)
 })
 
-// get to /position-from-companies should return the endusers position at some point
+// get to /get-position returns the endusers position
 // takes query parameters a, b, c
-// just returns error message and the companies so far
-// localhost:8080/api/position-from-companies?a=A&b=B&c=C
-router.get('/position-from-companies', (req, res) => {
-  var companyA
-  var companyB
-  var companyC
+// localhost:8080/api/get-position?a=QCS&b=SkyCell&c=Sinalco
+router.get('/get-position', (req, res) => {
+  var companies = req.query
+  var positionX = 0
+  var positionY = 0
+  for (var key in companies) {
+    boothObjects.forEach((booth) => {
+      if (companies[key] === booth.name) {
+        positionX += calculateCenter(booth.coords).x
+        positionY += calculateCenter(booth.coords).y
+      }
+    })
+  }
 
-  boothObjects.forEach((booth) => {
-    if (req.query.a === booth.name) {
-      companyA = booth
-    }
-    if (req.query.b === booth.name) {
-      companyB = booth
-    }
-    if (req.query.c === booth.name) {
-      companyC = booth
-    }
-  })
-  res.json({A: companyA, B: companyB, C: companyC})
+  res.json({x: positionX / 3, y: positionY / 3})
 })
+
+// takes a string of coordinates as a parameter and calculates and returns the center
+var calculateCenter = (coordString) => {
+  var numberOfCorners = coordString.split(':')[0]
+  var listOfCoordinates = coordString.split(':')[3].split(';')
+  var sumX = 0
+  var sumY = 0
+  listOfCoordinates.forEach((coordinate) => {
+    sumX += parseFloat(coordinate.split(',')[0])
+    sumY += parseFloat(coordinate.split(',')[1])
+  })
+  return {x: sumX / numberOfCorners, y: sumY / numberOfCorners}
+}
 
 // all requests have to go through /api
 app.use('/api', router)
