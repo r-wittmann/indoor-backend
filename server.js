@@ -41,8 +41,22 @@ router.get('/get-booths', (req, res) => {
 // just returns error message and the companies so far
 // localhost:8080/api/position-from-companies?a=A&b=B&c=C
 router.get('/position-from-companies', (req, res) => {
-  res.json({ message: 'Not implemented so far',
-    companies: [req.query.a, req.query.b, req.query.c] })
+  var companyA
+  var companyB
+  var companyC
+
+  boothObjects.forEach((booth) => {
+    if (req.query.a === booth.name) {
+      companyA = booth
+    }
+    if (req.query.b === booth.name) {
+      companyB = booth
+    }
+    if (req.query.c === booth.name) {
+      companyC = booth
+    }
+  })
+  res.json({A: companyA, B: companyB, C: companyC})
 })
 
 // all requests have to go through /api
