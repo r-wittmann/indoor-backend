@@ -29,7 +29,7 @@ router.get('/', (req, res) => {
   res.json({ message: 'Server for the indoor navigation project' })
 })
 
-// get to /all-booth-objects returns an array of all booth objects from the xml file
+// get to /get-booths returns an array of all booth objects from the xml file
 // no url or query parameters
 // localhost:8080/api/get-booths
 router.get('/get-booths', (req, res) => {
@@ -37,22 +37,22 @@ router.get('/get-booths', (req, res) => {
 })
 
 // get to /get-position returns the endusers position
-// takes query parameters a, b, c
-// localhost:8080/api/get-position?a=QCS&b=SkyCell&c=Sinalco
+// takes query parameter companies as a comma seperated list
+// localhost:8080/api/get-position?companies=QCS,SkyCell,Sinalco
 router.get('/get-position', (req, res) => {
-  var companies = req.query
+  var companies = req.query.companies.split(',')
   var positionX = 0
   var positionY = 0
-  for (var key in companies) {
-    boothObjects.forEach((booth) => {
-      if (companies[key] === booth.name) {
+  boothObjects.forEach((booth) => {
+    companies.forEach((company) => {
+      if (company === booth.name) {
         positionX += calculateCenter(booth.coords).x
         positionY += calculateCenter(booth.coords).y
       }
     })
-  }
+  })
 
-  res.json({x: positionX / 3, y: positionY / 3})
+  res.json({x: positionX / companies.length, y: positionY / companies.length})
 })
 
 // takes a string of coordinates as a parameter and calculates and returns the center
