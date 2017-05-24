@@ -18,6 +18,8 @@ var router = express.Router()
 // Use this method to do something after every api call to /api
 router.use((req, res, next) => {
   console.log('Something is happening.')
+  res.header('Access-Control-Allow-Origin', '*')
+  res.header('Access-Control-Allow-Headers', 'X-Requested-With')
   next()
 })
 
