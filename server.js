@@ -42,19 +42,32 @@ router.get('/get-booths', (req, res) => {
 // takes query parameter companies as a comma seperated list
 // localhost:8080/api/get-position?companies=QCS,SkyCell,Sinalco
 router.get('/get-position', (req, res) => {
-  var companies = req.query.companies.split(',')
-  var positionX = 0
-  var positionY = 0
-  boothObjects.forEach((booth) => {
-    companies.forEach((company) => {
-      if (company === booth.name) {
-        positionX += calculateCenter(booth.coords).x
-        positionY += calculateCenter(booth.coords).y
+  if (req.query.companies) {
+    var companies = req.query.companies.split(',')
+    if (companies.length === 3) {
+      var positionX = 0
+      var positionY = 0
+      var notEmpty = 0
+      boothObjects.forEach((booth) => {
+        companies.forEach((company) => {
+          if (company === booth.name) {
+            notEmpty++
+            positionX += calculateCenter(booth.coords).x
+            positionY += calculateCenter(booth.coords).y
+          }
+        })
+      })
+      if (notEmpty === 3) {
+        res.status(200).json({x: positionX / companies.length, y: positionY / companies.length})
+      } else {
+        res.status(404).json({'error': 'One or several companies could not be found!'})
       }
-    })
-  })
-
-  res.json({x: positionX / companies.length, y: positionY / companies.length})
+    } else {
+      res.status(400).json({'error': 'Three company names expected'})
+    }
+  } else {
+    res.status(400).json({'error': 'Companies missing. Call e.g. /api/get-position?companies=QCS,SkyCell,Sinalco'})
+  }
 })
 
 // takes a string of coordinates as a parameter and calculates and returns the center
