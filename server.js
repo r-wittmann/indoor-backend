@@ -35,7 +35,14 @@ router.get('/', (req, res) => {
 // no url or query parameters
 // localhost:8080/api/get-booths
 router.get('/get-booths', (req, res) => {
-  res.json(boothObjects)
+  var responseObject = []
+  boothObjects.forEach((booth) => {
+    responseObject.push({
+      name: booth.name,
+      coordinates: booth.coords.split(':')[3].split(';')
+    })
+  })
+  res.json(responseObject)
 })
 
 // get to /get-position returns the endusers position
