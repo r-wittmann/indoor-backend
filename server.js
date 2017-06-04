@@ -51,7 +51,8 @@ router.get('/get-booths', (req, res) => {
 router.get('/get-position', (req, res) => {
   if (req.query.companies) {
     var companies = req.query.companies.split(',')
-    if (companies.length === 3) {
+    var numberOfBooths = 3
+    if (companies.length === numberOfBooths) {
       var positionX = 0
       var positionY = 0
       var notEmpty = 0
@@ -64,8 +65,8 @@ router.get('/get-position', (req, res) => {
           }
         })
       })
-      if (notEmpty === 3) {
-        res.status(200).json({x: positionX / companies.length, y: positionY / companies.length})
+      if (notEmpty === numberOfBooths) {
+        res.status(200).json({x: positionX / numberOfBooths, y: positionY / numberOfBooths })
       } else {
         res.status(404).json({'error': 'One or several companies could not be found!'})
       }
