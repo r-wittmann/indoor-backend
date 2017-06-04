@@ -45,14 +45,16 @@ router.get('/get-booths', (req, res) => {
   res.json(responseObject)
 })
 
+// this is the number of companies which is currently required for position calculation
+const numberOfCompanies = 3
+
 // get to /get-position returns the endusers position
 // takes query parameter companies as a comma seperated list
 // localhost:8080/api/get-position?companies=QCS,SkyCell,Sinalco
 router.get('/get-position', (req, res) => {
   if (req.query.companies) {
     var companies = req.query.companies.split(',')
-    var numberOfBooths = 3
-    if (companies.length === numberOfBooths) {
+    if (companies.length === numberOfCompanies) {
       var positionX = 0
       var positionY = 0
       var notEmpty = 0
@@ -65,8 +67,8 @@ router.get('/get-position', (req, res) => {
           }
         })
       })
-      if (notEmpty === numberOfBooths) {
-        res.status(200).json({x: positionX / numberOfBooths, y: positionY / numberOfBooths })
+      if (notEmpty === numberOfCompanies) {
+        res.status(200).json({ x: positionX / numberOfCompanies, y: positionY / numberOfCompanies })
       } else {
         res.status(404).json({'error': 'One or several companies could not be found!'})
       }
