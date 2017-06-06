@@ -46,14 +46,16 @@ router.get('/get-booths', (req, res) => {
   res.json(responseObject)
 })
 
-const originLat = 48.136081
-const originLng = 11.695715
+const originLat = 48.137302
+const originLng = 11.693632
 const rEarth = 6366821
+const scaleFactorx = 0.85
+const scaleFactory = 1.45
 
 var translateToLatLng = ([x, y]) => {
-  var latitude = originLat + (x / rEarth) * (180 / Math.PI)
-  var longitude = originLng + (y / rEarth) * (180 / Math.PI) / Math.cos(originLng * Math.PI / 180)
-  return [latitude, longitude]
+  var latitude = originLat - (x * scaleFactorx / rEarth) * (180 / Math.PI)
+  var longitude = originLng + (y * scaleFactory / rEarth) * (180 / Math.PI) / Math.cos(originLng * Math.PI / 180)
+  return {lat: latitude, lng: longitude}
 }
 
 // this is the number of companies which is currently required for position calculation
