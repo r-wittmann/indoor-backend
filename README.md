@@ -2,6 +2,7 @@
 
 This repository containes the code for the backend server for the indoor navigation prototype. It is developed in line with the requirements of the course Technical Concepts of Media for the MMT masters program at LMU.
 Frontend can be found [here](https://github.com/r-wittmann/indoor-frontend)
+Logo manipulation can be found [here](https://github.com/r-wittmann/logo-manipulation)
 
 # Getting Starded
 
