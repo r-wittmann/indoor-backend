@@ -40,7 +40,7 @@ router.get('/get-booths', (req, res) => {
     var coords = booth.coords.split(':')[3].split(';').map((coord) => coord.split(','))
     responseObject.push({
       name: booth.name,
-      coordinates: coords.map(translateToLatLng)
+      coordinates: coords.map((coord) => translateToLatLng(coord[0], coord[1]))
     })
   })
   res.json(responseObject)
@@ -52,7 +52,7 @@ const rEarth = 6366821
 const scaleFactorx = 0.85
 const scaleFactory = 1.45
 
-var translateToLatLng = ([x, y]) => {
+var translateToLatLng = (x, y) => {
   var latitude = originLat - (x * scaleFactorx / rEarth) * (180 / Math.PI)
   var longitude = originLng + (y * scaleFactory / rEarth) * (180 / Math.PI) / Math.cos(originLng * Math.PI / 180)
   return {lat: latitude, lng: longitude}
@@ -81,7 +81,7 @@ router.get('/get-position', (req, res) => {
         })
       })
       if (notEmpty === numberOfCompanies) {
-        res.status(200).json(translateToLatLng([positionX / numberOfCompanies, positionY / numberOfCompanies]))
+        res.status(200).json(translateToLatLng(positionX / numberOfCompanies, positionY / numberOfCompanies))
       } else {
         res.status(404).json({'error': 'One or several companies could not be found!'})
       }
