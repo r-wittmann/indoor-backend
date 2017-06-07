@@ -81,7 +81,7 @@ router.get('/get-position', (req, res) => {
         })
       })
       if (notEmpty === numberOfCompanies) {
-        res.status(200).json({ x: positionX / numberOfCompanies, y: positionY / numberOfCompanies })
+        res.status(200).json(translateToLatLng([positionX / numberOfCompanies, positionY / numberOfCompanies]))
       } else {
         res.status(404).json({'error': 'One or several companies could not be found!'})
       }
