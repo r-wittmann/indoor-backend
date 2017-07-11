@@ -13,11 +13,16 @@ fs.readFile('./coordinates.xml', 'utf-8', (err, data) => {
   err && console.log(err)
 })
 
+var getLogDate = () => {
+  let date = new Date()
+  return `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}.${date.getMilliseconds()}`
+}
+
 var router = express.Router()
 
 // Use this method to do something after every api call to /api
 router.use((req, res, next) => {
-  console.log('Something is happening.')
+  console.log(getLogDate(), 'api called with enpoint:', `api${req.url}`)
   res.header('Access-Control-Allow-Origin', '*')
   res.header('Access-Control-Allow-Headers', 'X-Requested-With')
   next()
@@ -43,6 +48,7 @@ router.get('/get-booths', (req, res) => {
       coordinates: coords.map((coord) => translateToLatLng(coord[0], coord[1]))
     })
   })
+  console.log(getLogDate(), 'response object for request for booths sent')
   res.json(responseObject)
 })
 
@@ -65,6 +71,7 @@ const numberOfCompanies = 3
 // takes query parameter companies as a comma seperated list
 // localhost:8080/api/get-position?companies=QCS,SkyCell,Sinalco
 router.get('/get-position', (req, res) => {
+  console.log(getLogDate(), 'start position calculation')
   if (req.query.companies) {
     var companies = req.query.companies.split(',')
     if (companies.length === numberOfCompanies) {
@@ -81,14 +88,18 @@ router.get('/get-position', (req, res) => {
         })
       })
       if (notEmpty === numberOfCompanies) {
+        console.log(getLogDate(), 'position calculation done:', `x: ${positionX}, y: ${positionY}`)
         res.status(200).json(translateToLatLng(positionX / numberOfCompanies, positionY / numberOfCompanies))
       } else {
+        console.error(getLogDate(), 'One or several companies could not be found!')
         res.status(404).json({'error': 'One or several companies could not be found!'})
       }
     } else {
+      console.error(getLogDate(), 'Three company names expected')
       res.status(400).json({'error': 'Three company names expected'})
     }
   } else {
+    console.error(getLogDate(), 'Companies missing. Call e.g. /api/get-position?companies=QCS,SkyCell,Sinalco')
     res.status(400).json({'error': 'Companies missing. Call e.g. /api/get-position?companies=QCS,SkyCell,Sinalco'})
   }
 })
