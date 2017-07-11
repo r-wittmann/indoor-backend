@@ -14,7 +14,7 @@ fs.readFile('./coordinates.xml', 'utf-8', (err, data) => {
 })
 
 var getLogDate = () => {
-  let date = new Date()
+  var date = new Date()
   return `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}.${date.getMilliseconds()}`
 }
 
