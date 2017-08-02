@@ -7,9 +7,18 @@ var app = express()
 var port = process.env.PORT || 8080
 
 var boothObjects
+var boothResponsObject
 
 fs.readFile('./coordinates.xml', 'utf-8', (err, data) => {
   boothObjects = parser.toJson(data, { object: true }).MCAD1_Export_XML.Boothes.Class
+  boothResponsObject = []
+  boothObjects.forEach((booth) => {
+    var coords = booth.coords.split(':')[3].split(';').map((coord) => coord.split(','))
+    boothResponsObject.push({
+      name: booth.name,
+      coordinates: coords.map((coord) => translateToLatLng(coord[0], coord[1]))
+    })
+  })
   err && console.log(err)
 })
 
@@ -40,16 +49,8 @@ router.get('/', (req, res) => {
 // no url or query parameters
 // localhost:8080/api/get-booths
 router.get('/get-booths', (req, res) => {
-  var responseObject = []
-  boothObjects.forEach((booth) => {
-    var coords = booth.coords.split(':')[3].split(';').map((coord) => coord.split(','))
-    responseObject.push({
-      name: booth.name,
-      coordinates: coords.map((coord) => translateToLatLng(coord[0], coord[1]))
-    })
-  })
   console.log(getLogDate(), 'response object for request for booths sent')
-  res.json(responseObject)
+  res.json(boothResponsObject)
 })
 
 const originLat = 48.137302

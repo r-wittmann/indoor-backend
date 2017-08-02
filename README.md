@@ -14,3 +14,9 @@ As we just need a REST API with a little logic behind it, we decided to use Node
     $> npm run develop
 
 This starts a webserver on localhost:3000 which restarts on every code change in the project.
+
+# Deployment
+
+The backend is deployed on Pivotal Webservices using CloudFoundry. Call ```$>npm run deploy``` to deploy the backend.
+
+&copy; 2017 by [dianadybok](https://github.com/dianadybok), [lottemacchiato](https://github.com/lottemacchiato), [r-wittmann](https://github.com/r-wittmann) and [yusef7](https://github.com/yusef7). All rights reserved.
